@@ -113,9 +113,12 @@ namespace poor_man_lexer
                     nodes[i, 0] = nodes[(i + 1), 0];
                 }
 
-                nodes[(node_count - 1), 0] = null;
+                if (node_count > 0)
+                {
+                    nodes[(node_count - 1), 0] = null;
 
-                node_count--;
+                    node_count--;
+                }
 
                 deq_flg = 0;
             }
@@ -145,9 +148,12 @@ namespace poor_man_lexer
 
                 Console.WriteLine("pop node count: {0}", node_count);
 
-                nodes[node_count-1, 0] = "_____";
+                if (node_count > 0)
+                {
+                    nodes[node_count - 1, 0] = "_____";
 
-                node_count--;
+                    node_count--;
+                }
 
                 pop_flg = 0;
             }
