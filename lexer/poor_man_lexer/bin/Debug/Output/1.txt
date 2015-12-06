@@ -1,1 +1,1 @@
-digraph G {node1;node2;node1->node2;}
+digraph G {node [shape="record"]; stack[style=filled, label="<f0> node1 | <f1> node2"];}

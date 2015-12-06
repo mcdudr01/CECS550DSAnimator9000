@@ -455,7 +455,6 @@ namespace poor_man_lexer
                 System.IO.File.WriteAllText(dot_file, text);
 
                 Console.WriteLine("dot file: {0}", dot_file);
-
                 //'process start' block
                 Process p = new Process();
                 p.StartInfo.FileName = path + "\\Graphviz\\bin\\dot.exe";

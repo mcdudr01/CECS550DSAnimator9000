@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -57,7 +58,21 @@ namespace DSAnimator9000
 
         private void Menu_Animate_Click(object sender, RoutedEventArgs e)
         {
+            //Logic to run poor_man_lexer and pass code present in the txt_code textbox
+            //string path = "C:\\Users\\Dooder\\Documents\\GitHub\\DSAnimator9000\\lexer\\poor_man_lexer\\bin\\Debug\\";
+            string path = Directory.GetCurrentDirectory() + "\\..\\..\\lexer\\poor_man_lexer\\bin\\Debug\\";
 
+            Process p = new Process();
+            p.StartInfo.FileName = path + "poor_man_lexer.exe";
+            p.StartInfo.Arguments = path + "Input\\List.cs";
+            //p.StartInfo.Arguments = txt_code.Text;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+
+            //string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
         }
 
         private void btn_back_Click(object sender, RoutedEventArgs e)
