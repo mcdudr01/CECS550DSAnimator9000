@@ -58,18 +58,11 @@
     <Compile Include="Frames\CommandWindow.xaml.cs">
       <DependentUpon>CommandWindow.xaml</DependentUpon>
     </Compile>
-<<<<<<< HEAD
-    <Compile Include="Frames\TextWindow.xaml.cs">
-      <DependentUpon>TextWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="Frames\AnimationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Frames\MainWindow.xaml">
-=======
-    <Page Include="MainWindow.xaml">
->>>>>>> Dolan
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -108,7 +101,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <AppDesigner Include="Properties\" />
+    <!--<AppDesigner Include="Properties\" />-->
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
