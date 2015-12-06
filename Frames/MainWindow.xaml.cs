@@ -81,10 +81,10 @@ namespace DSAnimator9000
                 File.WriteAllText(saveFileDialog.FileName, txt_code.Text);
         }
 
-        private void Menu_Exit_Click(object sender, RoutedEventArgs e)
-        {
+        //private void Menu_Exit_Click(object sender, RoutedEventArgs e)
+        //{
 
-        }
+        //}
 
         private void Menu_Animate_Click(object sender, RoutedEventArgs e)
         {

@@ -25,8 +25,6 @@
                 <MenuItem Header="_New" Click="Menu_New_Click"/>
                 <MenuItem Header="_Open" Click="Menu_Open_Click"/>
                 <MenuItem Header="_Save"  Click="Menu_Save_Click"/>
-                <Separator />
-                <MenuItem Header="_Exit" />
             </MenuItem>
             <MenuItem Header="_Animate" Click="Menu_Animate_Click">
                 
