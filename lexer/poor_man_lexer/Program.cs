@@ -270,6 +270,9 @@ namespace poor_man_lexer
 
             string path = Directory.GetCurrentDirectory();
 
+            Array.ForEach(Directory.GetFiles(path + "\\Output\\png\\"), File.Delete);
+            Array.ForEach(Directory.GetFiles(path + "\\Output\\txt\\"), File.Delete);
+
             //parse input file into strings delimited by each semicolon
             char[] delimiter = { ';' };
 
@@ -280,7 +283,7 @@ namespace poor_man_lexer
 
             chunks.Add(snippets[0] + " " + snippets[1] + " ");
 
-            for (int i = 1; i < snippets.Length - 2; i++)
+            for (int i = 0; i < snippets.Length - 2; i++)
             {
 
                 add_flg = 0;
@@ -296,8 +299,9 @@ namespace poor_man_lexer
                 node_count = 0;
 
                 //Console.WriteLine(snippets[i]);
-                //chunks[i] = chunks[i - 1] + " " + snippets[i + 1] + " ";
-                chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
+
+                if(i > 0)
+                    chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
 
                 Console.WriteLine("snippet: {0}", snippets[i + 1]);
                 Console.WriteLine("chunk: {0}", chunks[i]);
@@ -305,7 +309,7 @@ namespace poor_man_lexer
                 TextReader r = new StringReader(chunks[i]);
                 Lexer l = new Lexer(r, defs);
 
-                string dot_file = path + "\\Output\\" + i + ".txt";
+                string dot_file = path + "\\Output\\txt\\" + i + ".txt";
 
                 Console.WriteLine("The current file to write to is {0}", dot_file);
 
