@@ -6,6 +6,19 @@
         xmlns:local="clr-namespace:DSAnimator9000"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
+    <!--<Window.Background>
+        <ImageBrush ImageSource="Icons/arrow.png" />
+    </Window.Background>-->
+    <Window.Resources>
+        <!-- Start Fade -->
+        <Storyboard x:Key="FadeIn" >
+            <DoubleAnimation Duration="0:0:.25" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOut">
+            <DoubleAnimation Duration="0:0:.5" Storyboard.TargetProperty="Opacity" To="0" />
+        </Storyboard>
+        <!-- End Fade -->
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -36,7 +49,20 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
-                            <Frame Margin="2" Source="AnimationWindow.xaml" />
+                            <!--<Frame Margin="2" Source="AnimationWindow.xaml" />-->
+                            <Canvas Height="250" Width="250">
+                                <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                </Image>
+                                <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                </Image>
+                                <TextBlock TextWrapping="Wrap" x:Name="ErrorText" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Visibility="Collapsed" Text="The specified folder does not exist" FontSize="20" />
+                            </Canvas>
+                            <!--<Button  Name="Back" DockPanel.Dock="Right" Height="50" Width="50" Click="Back_Click">Back</Button>
+                            <Button  Name="Foward" DockPanel.Dock="Right" Height="50" Width="50" Click="Foward_Click">Forward</Button>
+                            <Button  Name="Start" DockPanel.Dock="Right" Height="50" Width="50" Click="Start_Click">Start</Button>
+                            <Button  Name="Stop" DockPanel.Dock="Right" Height="50" Width="50" Click="Stop_Click">Stop</Button>
+                            <Button  Name="test" DockPanel.Dock="Right" Height="50" Width="50" Click="test_Click">test</Button>
+                            <TextBox DockPanel.Dock="Left"/>-->
                         </Border>
                         <DockPanel Grid.Row="1">
                             <Grid HorizontalAlignment="Center">
