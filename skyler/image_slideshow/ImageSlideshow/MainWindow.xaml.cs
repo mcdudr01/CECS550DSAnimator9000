@@ -27,14 +27,15 @@ namespace ImageSlideshow
         private static string[] ValidImageExtensions = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
         private static string[] TransitionEffects = new[] { "Fade" };
         private string TransitionType, strImagePath = "";
-        private int CurrentSourceIndex, CurrentCtrlIndex, EffectIndex = 0, IntervalTimer = 1;
+        private int CurrentSourceIndex, CurrentCtrlIndex, EffectIndex = 0, IntervalTimer = 2;
 
         public MainWindow()
         {
             InitializeComponent();
 
             //Initialize Image control, Image directory path and Image timer.
-            IntervalTimer = Convert.ToInt32(ConfigurationManager.AppSettings["IntervalTime"]);
+            //IntervalTimer = Convert.ToInt32(ConfigurationManager.AppSettings["IntervalTime"]);
+            IntervalTimer = 2;
             strImagePath = ConfigurationManager.AppSettings["ImagePath"];
             ImageControls = new[] { myImage, myImage2 };
 
@@ -53,8 +54,10 @@ namespace ImageSlideshow
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-
+            IntervalTimer = 0;
             timerImageChange.IsEnabled = true;
+            IntervalTimer = 2;
+            
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -98,7 +101,10 @@ namespace ImageSlideshow
                     return;
                 var oldCtrlIndex = CurrentCtrlIndex;
                 CurrentCtrlIndex = (CurrentCtrlIndex + 1) % 2;
-                CurrentSourceIndex = (CurrentSourceIndex - 1) % Images.Count;
+                if (CurrentSourceIndex == 0)
+                    CurrentSourceIndex = 0;
+                else
+                    CurrentSourceIndex = (CurrentSourceIndex - 1) % Images.Count;
 
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
@@ -115,10 +121,21 @@ namespace ImageSlideshow
             catch (Exception ex) { }
         }
 
+        private void test_Click(object sender, RoutedEventArgs e)
+        {
+            timerImageChange.IsEnabled = false;
+            try
+            {
+               // Directory.CreateDirectory("./BOB");
+            }
+            catch (Exception ex) { }
+        }
+
         private void LoadImageFolder(string folder)
         {
             ErrorText.Visibility = Visibility.Collapsed;
             var sw = System.Diagnostics.Stopwatch.StartNew();
+            // Can change directory here
             if (!System.IO.Path.IsPathRooted(folder))
                 folder = System.IO.Path.Combine(Environment.CurrentDirectory, folder);
             if (!System.IO.Directory.Exists(folder))
@@ -128,9 +145,9 @@ namespace ImageSlideshow
                 return;
             }
             Random r = new Random();
-            var sources = from file in new System.IO.DirectoryInfo(folder).GetFiles().AsParallel()
+            var sources = from file in new System.IO.DirectoryInfo(folder).GetFiles().OrderBy(p => p.Name) // .AsParallel()
                           where ValidImageExtensions.Contains(file.Extension, StringComparer.InvariantCultureIgnoreCase)
-                          orderby r.Next()
+                          //orderby r.Next()
                           select CreateImageSource(file.FullName, true);
             Images.Clear();
             Images.AddRange(sources);
@@ -171,13 +188,14 @@ namespace ImageSlideshow
                     return;
                 var oldCtrlIndex = CurrentCtrlIndex;
                 CurrentCtrlIndex = (CurrentCtrlIndex + 1) % 2;
+
+                ImageSource newSource = Images[CurrentSourceIndex];
                 CurrentSourceIndex = (CurrentSourceIndex + 1) % Images.Count;
 
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
-                ImageSource newSource = Images[CurrentSourceIndex];
+               
                 imgFadeIn.Source = newSource;
-
                 TransitionType = TransitionEffects[EffectIndex].ToString();
 
                 Storyboard StboardFadeOut = (Resources[string.Format("{0}Out", TransitionType.ToString())] as Storyboard).Clone();
@@ -186,6 +204,7 @@ namespace ImageSlideshow
                 StboardFadeIn.Begin(imgFadeIn);
             }
             catch (Exception ex) { }
+          
         }
     }
 }

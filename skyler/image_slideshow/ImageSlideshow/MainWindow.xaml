@@ -20,20 +20,10 @@
         <!-- End Fade -->
     </Window.Resources>
     <DockPanel>
-        <Canvas Width="1024" Height="768" DockPanel.Dock="Right">
-            <Image x:Name="myImage" Stretch="UniformToFill" RenderTransformOrigin="0.5,0.5" Width="1024" Height="768" Canvas.Top="0">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform X="0" Y="0" />
-                    </TransformGroup>
-                </Image.RenderTransform>
+        <Canvas DockPanel.Dock="Right" Width="1024" Height="768">
+            <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             </Image>
-            <Image x:Name="myImage2" Stretch="UniformToFill" RenderTransformOrigin="0.5,0.5" Width="1024" Height="768" Canvas.Left="0" Canvas.Top="0">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform X="0" Y="0" />
-                    </TransformGroup>
-                </Image.RenderTransform>
+            <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             </Image>
             <TextBlock TextWrapping="Wrap" x:Name="ErrorText" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Visibility="Collapsed" Text="The specified folder does not exist" FontSize="20" />
         </Canvas>
@@ -41,6 +31,7 @@
         <Button  Name="Foward" DockPanel.Dock="Right" Height="50" Width="50" Click="Foward_Click">Forward</Button>
         <Button  Name="Start" DockPanel.Dock="Right" Height="50" Width="50" Click="Start_Click">Start</Button>
         <Button  Name="Stop" DockPanel.Dock="Right" Height="50" Width="50" Click="Stop_Click">Stop</Button>
+        <Button  Name="test" DockPanel.Dock="Right" Height="50" Width="50" Click="test_Click">test</Button>
         <TextBox DockPanel.Dock="Left"/>
     </DockPanel>
 </Window>
