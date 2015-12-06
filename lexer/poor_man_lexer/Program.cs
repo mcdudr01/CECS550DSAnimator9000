@@ -41,7 +41,7 @@ namespace poor_man_lexer
         static string[,] nodes = new string[20, 4];
 
         //array of strings to hold the chopped up input file as separate strings in order to produce sequential png's
-        static string[] chunks = new string[25];
+        static List<string> chunks = new List<string>();
 
         static void List(Lexer l)
         {
@@ -278,7 +278,7 @@ namespace poor_man_lexer
             Console.WriteLine("length of snippets: {0}", snippets.Length);
             //Console.WriteLine("snippets[8]: {0}", snippets[8]);
 
-            chunks[0] = snippets[0] + " " + snippets[1] + " ";
+            chunks.Add(snippets[0] + " " + snippets[1] + " ");
 
             for (int i = 1; i < snippets.Length - 2; i++)
             {
@@ -296,7 +296,8 @@ namespace poor_man_lexer
                 node_count = 0;
 
                 //Console.WriteLine(snippets[i]);
-                chunks[i] = chunks[i - 1] + " " + snippets[i + 1] + " ";
+                //chunks[i] = chunks[i - 1] + " " + snippets[i + 1] + " ";
+                chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
 
                 Console.WriteLine("snippet: {0}", snippets[i + 1]);
                 Console.WriteLine("chunk: {0}", chunks[i]);
