@@ -47,9 +47,22 @@ namespace poor_man_lexer
         {
             if (add_flg == 1)
             {
-                //this line removes the quotes and adds the "node" to the txt file                       
+                string tmp_token = l.TokenContents.Replace("\"", "");
+                //int exists = 0;               
+
+                for (int i = 0; i < node_count; i++)
+                {
+                    if (tmp_token.CompareTo(nodes[i, 0]) == 0)
+                    {
+                        Console.WriteLine("this means that the node already exists!");
+
+                        nodes[i, 1] = "";                                                
+                    }                    
+                }
+
                 nodes[node_count - 1, 0] = l.TokenContents.Replace("\"", "");
-                add_flg = 0;
+
+                add_flg = 0;               
             }
 
             if (rem_flg == 1)
@@ -62,8 +75,7 @@ namespace poor_man_lexer
                         nodes[i, 1] = "[style=\"invis\"]";
                         nodes[i, 2] = "[style=\"invis\"]";
                         if (i > 0)
-                        {
-                            //nodes[(i - 1), 2] = "[style=\"invis\"]";
+                        {                            
                             nodes[(i - 1), 3] = "1";
                         }
                     }
@@ -113,9 +125,12 @@ namespace poor_man_lexer
                     nodes[i, 0] = nodes[(i + 1), 0];
                 }
 
-                nodes[(node_count - 1), 0] = null;
+                if (node_count > 0)
+                {
+                    nodes[(node_count - 1), 0] = null;
 
-                node_count--;
+                    node_count--;
+                }
 
                 deq_flg = 0;
             }
@@ -145,9 +160,12 @@ namespace poor_man_lexer
 
                 Console.WriteLine("pop node count: {0}", node_count);
 
-                nodes[node_count-1, 0] = "_____";
+                if (node_count > 0)
+                {
+                    nodes[node_count - 1, 0] = "_____";
 
-                node_count--;
+                    node_count--;
+                }
 
                 pop_flg = 0;
             }
@@ -158,7 +176,7 @@ namespace poor_man_lexer
             //list nodes at the top of the file
             for (int i = 0; i < node_count; i++)
             {
-                text = text + nodes[i, 0] + nodes[i, 1] + ";";
+                text = text + nodes[i, 0] + nodes[i, 1] + ";";                
             }
 
             //list edge connections
@@ -270,6 +288,9 @@ namespace poor_man_lexer
 
             string path = Directory.GetCurrentDirectory();
 
+            Array.ForEach(Directory.GetFiles(path + "\\Output\\png\\"), File.Delete);
+            Array.ForEach(Directory.GetFiles(path + "\\Output\\txt\\"), File.Delete);
+
             //parse input file into strings delimited by each semicolon
             char[] delimiter = { ';' };
 
@@ -280,7 +301,9 @@ namespace poor_man_lexer
 
             chunks.Add(snippets[0] + " " + snippets[1] + " ");
 
-            for (int i = 1; i < snippets.Length - 2; i++)
+            nodes[0,0] = "";
+
+            for (int i = 0; i < snippets.Length - 2; i++)
             {
 
                 add_flg = 0;
@@ -296,8 +319,9 @@ namespace poor_man_lexer
                 node_count = 0;
 
                 //Console.WriteLine(snippets[i]);
-                //chunks[i] = chunks[i - 1] + " " + snippets[i + 1] + " ";
-                chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
+
+                if(i > 0)
+                    chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
 
                 Console.WriteLine("snippet: {0}", snippets[i + 1]);
                 Console.WriteLine("chunk: {0}", chunks[i]);
@@ -305,7 +329,7 @@ namespace poor_man_lexer
                 TextReader r = new StringReader(chunks[i]);
                 Lexer l = new Lexer(r, defs);
 
-                string dot_file = path + "\\Output\\" + i + ".txt";
+                string dot_file = path + "\\Output\\txt\\" + i + ".txt";
 
                 Console.WriteLine("The current file to write to is {0}", dot_file);
 
