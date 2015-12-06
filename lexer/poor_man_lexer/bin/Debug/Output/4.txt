@@ -1,0 +1,1 @@
+digraph G {node1;node2;node3[style="invis"];node4;node1->node2;node2->node3[color="red"];node3->node4[style="invis"];}

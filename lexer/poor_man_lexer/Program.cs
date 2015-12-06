@@ -40,6 +40,9 @@ namespace poor_man_lexer
         //[i,0] is node name, [i,1] is for making nodes invisible, [i,2] is for making dangling pointers red, [i,3] is for connecting nodes after a good remove
         static string[,] nodes = new string[20, 4];
 
+        //array of strings to hold the chopped up input file as separate strings in order to produce sequential png's
+        static List<string> chunks = new List<string>();
+
         static void List(Lexer l)
         {
             if (add_flg == 1)
@@ -80,7 +83,10 @@ namespace poor_man_lexer
                         nodes[i, 2] = "[style=\"invis\"]";
                         if (i > 0)
                         {
-                            nodes[(i - 1), 2] = "[color=\"red\"]";
+                            if(nodes[(i-1), 1] == "[style=\"invis\"]")
+                                nodes[(i - 1), 2] = "[color=\"invis\"]";
+                            else
+                                nodes[(i - 1), 2] = "[color=\"red\"]";
                         }
                     }
                 }
@@ -261,175 +267,208 @@ namespace poor_man_lexer
             };
 
             var sample = File.ReadAllText(args[0]);
-            
-            TextReader r = new StringReader(sample);
-            Lexer l = new Lexer(r, defs);
 
             string path = Directory.GetCurrentDirectory();
 
-            string dot_file = path + "\\Output\\t.txt";
+            //parse input file into strings delimited by each semicolon
+            char[] delimiter = { ';' };
 
-            Console.WriteLine("The current file to write to is {0}", dot_file);
+            string[] snippets = sample.Split(delimiter);
 
-            string text = "digraph G {";
+            Console.WriteLine("length of snippets: {0}", snippets.Length);
+            //Console.WriteLine("snippets[8]: {0}", snippets[8]);
 
-            while (l.Next())
+            chunks.Add(snippets[0] + " " + snippets[1] + " ");
+
+            for (int i = 1; i < snippets.Length - 2; i++)
             {
-                //Console.WriteLine("Token: {0} Contents: {1}", l.Token, l.TokenContents);
-                if(l.Token.Equals("SYMBOL"))
+
+                add_flg = 0;
+                rem_flg = 0;
+                bad_rem_flg = 0;
+                second_pass = 1;
+                enq_flg = 0;
+                deq_flg = 0;
+                bad_deq_flg = 0;
+                deq_counter = 0;
+                push_flg = 0;
+                pop_flg = 0;
+                node_count = 0;
+
+                //Console.WriteLine(snippets[i]);
+                //chunks[i] = chunks[i - 1] + " " + snippets[i + 1] + " ";
+                chunks.Insert(i, chunks[i - 1] + " " + snippets[i + 1] + " ");
+
+                Console.WriteLine("snippet: {0}", snippets[i + 1]);
+                Console.WriteLine("chunk: {0}", chunks[i]);
+
+                TextReader r = new StringReader(chunks[i]);
+                Lexer l = new Lexer(r, defs);
+
+                string dot_file = path + "\\Output\\" + i + ".txt";
+
+                Console.WriteLine("The current file to write to is {0}", dot_file);
+
+                string text = "digraph G {";
+
+                while (l.Next())
                 {
-                    Console.WriteLine("symbol: {0}", l.TokenContents);
-                }
-
-                if (l.Token.Equals("LIST"))
-                {
-                    Console.WriteLine("List: {0}", l.TokenContents);
-                    dataIdentifier = 0;
-
-                }               
-
-                if (l.Token.Equals("ADD"))
-                {
-                    Console.WriteLine("Add: {0}", l.TokenContents);
-
-                    node_count++;
-                    add_flg = 1;
-                }
-
-                if (l.Token.Equals("REMOVE"))
-                {
-                    Console.WriteLine("Remove: {0}", l.TokenContents);
-
-                    rem_flg = 1;
-                }
-
-                if (l.Token.Equals("BADREMOVE"))
-                {
-                    Console.WriteLine("badRemove: {0}", l.TokenContents);
-
-                    bad_rem_flg = 1;
-                }
-
-                if (l.Token.Equals("QUEUE"))
-                {
-                    Console.WriteLine("Queue: {0}", l.TokenContents);
-
-                    if(second_pass == 0)
-                        text = text + "node [shape=\"record\"]; stack[style=filled, label=\"<f0> ";
-                    dataIdentifier = 1;
-
-                    second_pass--;               
-                }
-
-                if (l.Token.Equals("ENQUEUE"))
-                {
-                    Console.WriteLine("Enqueue: {0}", l.TokenContents);
-
-                    node_count++;
-                    enq_flg = 1;
-                }
-
-                if (l.Token.Equals("DEQUEUE"))
-                {
-                    Console.WriteLine("Dequeue: {0}", l.TokenContents);
-
-                    deq_flg = 1;
-
-                    Queue(l);
-                }
-
-                if (l.Token.Equals("BADDEQUEUE"))
-                {
-                    Console.WriteLine("badDequeue: {0}", l.TokenContents);
-
-                    bad_deq_flg = 1;
-
-                    Queue(l);
-                }               
-
-                if (l.Token.Equals("STACK"))
-                {
-                    Console.WriteLine("Stack: {0}", l.TokenContents);
-
-                    if (second_pass == 0)
-                        text = text + "node [shape=\"record\"]; stack[style=filled, label=\"<f0> ";
-
-                    dataIdentifier = 2;
-
-                    second_pass--;
-                }
-
-                if (l.Token.Equals("PUSH"))
-                {
-                    Console.WriteLine("Push: {0}", l.TokenContents);
-
-                    node_count++;
-                    push_flg = 1;
-                }
-
-                if (l.Token.Equals("POP"))
-                {
-                    Console.WriteLine("Pop: {0}", l.TokenContents);
-
-                    pop_flg = 1;
-
-                    Stack(l);
-                }
-
-                if (l.Token.Equals("QUOTED-STRING"))
-                {
-                    Console.WriteLine("identifier: {0}", l.TokenContents);
-
-                    switch (dataIdentifier)
+                    //Console.WriteLine("Token: {0} Contents: {1}", l.Token, l.TokenContents);
+                    if (l.Token.Equals("SYMBOL"))
                     {
-                        case 0:
-                            List(l);
-                            break;
-                        case 1:
-                            Queue(l);
-                            break;
-                        case 2:
-                            Stack(l);
-                            break;
-                        default:
-                            break;
+                        Console.WriteLine("symbol: {0}", l.TokenContents);
+                    }
+
+                    if (l.Token.Equals("LIST"))
+                    {
+                        Console.WriteLine("List: {0}", l.TokenContents);
+                        dataIdentifier = 0;
+
+                    }
+
+                    if (l.Token.Equals("ADD"))
+                    {
+                        Console.WriteLine("Add: {0}", l.TokenContents);
+
+                        node_count++;
+                        add_flg = 1;
+                    }
+
+                    if (l.Token.Equals("REMOVE"))
+                    {
+                        Console.WriteLine("Remove: {0}", l.TokenContents);
+
+                        rem_flg = 1;
+                    }
+
+                    if (l.Token.Equals("BADREMOVE"))
+                    {
+                        Console.WriteLine("badRemove: {0}", l.TokenContents);
+
+                        bad_rem_flg = 1;
+                    }
+
+                    if (l.Token.Equals("QUEUE"))
+                    {
+                        Console.WriteLine("Queue: {0}", l.TokenContents);
+
+                        if (second_pass == 0)
+                            text = text + "node [shape=\"record\"]; stack[style=filled, label=\"<f0> ";
+                        dataIdentifier = 1;
+
+                        second_pass--;
+                    }
+
+                    if (l.Token.Equals("ENQUEUE"))
+                    {
+                        Console.WriteLine("Enqueue: {0}", l.TokenContents);
+
+                        node_count++;
+                        enq_flg = 1;
+                    }
+
+                    if (l.Token.Equals("DEQUEUE"))
+                    {
+                        Console.WriteLine("Dequeue: {0}", l.TokenContents);
+
+                        deq_flg = 1;
+
+                        Queue(l);
+                    }
+
+                    if (l.Token.Equals("BADDEQUEUE"))
+                    {
+                        Console.WriteLine("badDequeue: {0}", l.TokenContents);
+
+                        bad_deq_flg = 1;
+
+                        Queue(l);
+                    }
+
+                    if (l.Token.Equals("STACK"))
+                    {
+                        Console.WriteLine("Stack: {0}", l.TokenContents);
+
+                        if (second_pass == 0)
+                            text = text + "node [shape=\"record\"]; stack[style=filled, label=\"<f0> ";
+
+                        dataIdentifier = 2;
+
+                        second_pass--;
+                    }
+
+                    if (l.Token.Equals("PUSH"))
+                    {
+                        Console.WriteLine("Push: {0}", l.TokenContents);
+
+                        node_count++;
+                        push_flg = 1;
+                    }
+
+                    if (l.Token.Equals("POP"))
+                    {
+                        Console.WriteLine("Pop: {0}", l.TokenContents);
+
+                        pop_flg = 1;
+
+                        Stack(l);
+                    }
+
+                    if (l.Token.Equals("QUOTED-STRING"))
+                    {
+                        Console.WriteLine("identifier: {0}", l.TokenContents);
+
+                        switch (dataIdentifier)
+                        {
+                            case 0:
+                                List(l);
+                                break;
+                            case 1:
+                                Queue(l);
+                                break;
+                            case 2:
+                                Stack(l);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
+
+                switch (dataIdentifier)
+                {
+                    case 0:
+                        text = buildList(text);
+                        break;
+                    case 1:
+                        text = buildQueue(text);
+                        break;
+                    case 2:
+                        text = buildStack(text);
+                        break;
+                    default:
+                        break;
+                }
+
+                text = text + "}";
+
+                System.IO.File.WriteAllText(dot_file, text);
+
+                Console.WriteLine("dot file: {0}", dot_file);
+
+                //'process start' block
+                Process p = new Process();
+                p.StartInfo.FileName = path + "\\Graphviz\\bin\\dot.exe";
+                p.StartInfo.Arguments = "-Tpng " + dot_file + " -o " + path + "\\Output\\png\\" + i + ".png";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.Start();
+
+                string output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+
+                //Console.ReadKey();
             }
-
-            switch(dataIdentifier)
-            {
-                case 0:
-                    text = buildList(text);
-                    break;
-                case 1:
-                    text = buildQueue(text);
-                    break;
-                case 2:
-                    text = buildStack(text);
-                    break;
-                default:
-                    break;
-            }
-
-            text = text + "}";
-
-            System.IO.File.WriteAllText(dot_file, text);
-
-            Console.WriteLine("dot file: {0}", dot_file);
-
-            //'process start' block
-            Process p = new Process();
-            p.StartInfo.FileName = path + "\\Graphviz\\bin\\dot.exe";
-            p.StartInfo.Arguments = "-Tpng " + dot_file + " -o " + path + "\\Output\\t.png";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.Start();
-
-            string output = p.StandardOutput.ReadToEnd();
-            p.WaitForExit();
-
-            //Console.ReadKey();
         }
     }
 }
