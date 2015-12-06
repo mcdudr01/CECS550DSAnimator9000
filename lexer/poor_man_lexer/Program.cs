@@ -47,9 +47,22 @@ namespace poor_man_lexer
         {
             if (add_flg == 1)
             {
-                //this line removes the quotes and adds the "node" to the txt file                       
+                string tmp_token = l.TokenContents.Replace("\"", "");
+                //int exists = 0;               
+
+                for (int i = 0; i < node_count; i++)
+                {
+                    if (tmp_token.CompareTo(nodes[i, 0]) == 0)
+                    {
+                        Console.WriteLine("this means that the node already exists!");
+
+                        nodes[i, 1] = "";                                                
+                    }                    
+                }
+
                 nodes[node_count - 1, 0] = l.TokenContents.Replace("\"", "");
-                add_flg = 0;
+
+                add_flg = 0;               
             }
 
             if (rem_flg == 1)
@@ -62,8 +75,7 @@ namespace poor_man_lexer
                         nodes[i, 1] = "[style=\"invis\"]";
                         nodes[i, 2] = "[style=\"invis\"]";
                         if (i > 0)
-                        {
-                            //nodes[(i - 1), 2] = "[style=\"invis\"]";
+                        {                            
                             nodes[(i - 1), 3] = "1";
                         }
                     }
@@ -164,7 +176,7 @@ namespace poor_man_lexer
             //list nodes at the top of the file
             for (int i = 0; i < node_count; i++)
             {
-                text = text + nodes[i, 0] + nodes[i, 1] + ";";
+                text = text + nodes[i, 0] + nodes[i, 1] + ";";                
             }
 
             //list edge connections
@@ -288,6 +300,8 @@ namespace poor_man_lexer
             //Console.WriteLine("snippets[8]: {0}", snippets[8]);
 
             chunks.Add(snippets[0] + " " + snippets[1] + " ");
+
+            nodes[0,0] = "";
 
             for (int i = 0; i < snippets.Length - 2; i++)
             {
