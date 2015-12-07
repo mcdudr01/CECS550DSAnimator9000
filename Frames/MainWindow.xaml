@@ -26,9 +26,7 @@
                 <MenuItem Header="_Open" Click="Menu_Open_Click"/>
                 <MenuItem Header="_Save"  Click="Menu_Save_Click"/>
             </MenuItem>
-            <MenuItem Header="_Animate" Click="Menu_Animate_Click">
-                
-            </MenuItem>
+            <MenuItem Header="_Save &amp; Animate" Click="Menu_Animate_Click"></MenuItem>
         </Menu>
         <Grid>
             <Grid.ColumnDefinitions>

@@ -41,7 +41,6 @@ namespace DSAnimator9000
             //Initialize Image control, Image directory path and Image timer.
             //IntervalTimer = Convert.ToInt32(ConfigurationManager.AppSettings["IntervalTime"]);
             IntervalTimer = 2;
-            //strImagePath = ConfigurationManager.AppSettings["ImagePath"];
             strImagePath = Directory.GetCurrentDirectory() + "\\Output\\png\\";
             ImageControls = new[] { myImage, myImage2 };
             
@@ -88,13 +87,23 @@ namespace DSAnimator9000
 
         private void Menu_Animate_Click(object sender, RoutedEventArgs e)
         {
+            //Save text to a file and pass that file to the next block of code that start the poor_man_lexer
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = @"c:\temp\";
+            saveFileDialog.Filter = "CSharp file (*.cs)|*.cs|Text file (*.txt)|*.txt|C# file (*.cs)|*.cs";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, txt_code.Text);
+
+            string filename = saveFileDialog.FileName;
+
             //Logic to run poor_man_lexer and pass code present in the txt_code textbox
             //string path = "C:\\Users\\Dooder\\Documents\\GitHub\\DSAnimator9000\\lexer\\poor_man_lexer\\bin\\Debug\\";
             string path = Directory.GetCurrentDirectory() + "\\..\\..\\lexer\\poor_man_lexer\\bin\\Debug\\";
 
             Process p = new Process();
             p.StartInfo.FileName = path + "poor_man_lexer.exe";
-            p.StartInfo.Arguments = path + "Input\\List.cs";
+            //p.StartInfo.Arguments = path + "Input\\List.cs";
+            p.StartInfo.Arguments = filename;
             //p.StartInfo.Arguments = txt_code.Text;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -103,6 +112,15 @@ namespace DSAnimator9000
 
             //string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
+
+            // load new pngs
+            //Initialize Image control, Image directory path and Image timer.
+            IntervalTimer = 2;
+            strImagePath = Directory.GetCurrentDirectory() + "\\Output\\png\\";
+            ImageControls = new[] { myImage, myImage2 };
+            timerImageChange.IsEnabled = false;
+            PlaySlideShow();
+            timerImageChange.IsEnabled = true;
         }
 
         private void btn_back_Click(object sender, RoutedEventArgs e)
