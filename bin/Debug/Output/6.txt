@@ -1,0 +1,1 @@
+digraph G {node [shape="record"]; stack[style=filled, label="<f0> node3 | <f1> node4 | <f2> node5"];}

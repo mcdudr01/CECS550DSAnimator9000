@@ -34,8 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>animal-penguin.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,16 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Views\AnimationFrame.xaml.cs">
-      <DependentUpon>AnimationFrame.xaml</DependentUpon>
+    <Compile Include="Frames\CommandWindow.xaml.cs">
+      <DependentUpon>CommandWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CodeFrame.xaml.cs">
-      <DependentUpon>CodeFrame.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CommandsFrame.xaml.cs">
-      <DependentUpon>CommandsFrame.xaml</DependentUpon>
-    </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Frames\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -72,19 +70,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Frames\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\AnimationFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CodeFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CommandsFrame.xaml">
+    <Page Include="Frames\CommandWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,10 +101,28 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <AppDesigner Include="Properties\" />
+    <!--<AppDesigner Include="Properties\" />-->
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\control.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\cookie-chocolate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\control-pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\arrow-180.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="animal-penguin.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
