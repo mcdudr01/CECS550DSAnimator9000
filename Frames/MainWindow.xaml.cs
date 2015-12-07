@@ -33,7 +33,7 @@ namespace DSAnimator9000
         private static string[] TransitionEffects = new[] { "Fade" };
         private string TransitionType, strImagePath = "";
         private int CurrentSourceIndex, CurrentCtrlIndex, EffectIndex = 0, IntervalTimer = 2;
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -113,6 +113,14 @@ namespace DSAnimator9000
             //string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
 
+            // load commands to command display window under the animation window
+            string[] delimiters = { ";" };
+            string value = txt_code.Text;
+            string[] txt_commands = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            //TODO: Clean up the strings in the txt_commands array, remove the ending string
+            //TODO: next we need to populate the txt_block_commands with the entry corresponing to the currently displayed image
+            
+            
             // load new pngs
             //Initialize Image control, Image directory path and Image timer.
             IntervalTimer = 2;

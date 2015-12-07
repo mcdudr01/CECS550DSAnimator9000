@@ -38,27 +38,29 @@
             </Border>
             <Border Grid.Column="1" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
                 <DockPanel Margin="2">
-                    <Grid>
+                    <Grid DockPanel.Dock="Top">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="4*" />
                             <RowDefinition Height="32" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
-                            <!--<Frame Margin="2" Source="AnimationWindow.xaml" />-->
-                            <Canvas Height="250" Width="250">
-                                <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                </Image>
-                                <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                </Image>
-                                <TextBlock TextWrapping="Wrap" x:Name="ErrorText" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Visibility="Collapsed" Text="The specified folder does not exist" FontSize="20" />
-                            </Canvas>
-                            <!--<Button  Name="Back" DockPanel.Dock="Right" Height="50" Width="50" Click="Back_Click">Back</Button>
-                            <Button  Name="Foward" DockPanel.Dock="Right" Height="50" Width="50" Click="Foward_Click">Forward</Button>
-                            <Button  Name="Start" DockPanel.Dock="Right" Height="50" Width="50" Click="Start_Click">Start</Button>
-                            <Button  Name="Stop" DockPanel.Dock="Right" Height="50" Width="50" Click="Stop_Click">Stop</Button>
-                            <Button  Name="test" DockPanel.Dock="Right" Height="50" Width="50" Click="test_Click">test</Button>
-                            <TextBox DockPanel.Dock="Left"/>-->
+                        <Border Grid.Row="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                <Canvas Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                   AncestorType=ScrollViewer, 
+                                                   AncestorLevel=1},
+                                                    Path=ActualWidth}" 
+                                        Width="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                   AncestorType=ScrollViewer, 
+                                                   AncestorLevel=1},
+                                                    Path=ActualWidth}" VerticalAlignment="Top">
+                                    <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill">
+                                    </Image>
+                                    <Image  Canvas.Left="0" Canvas.Top="0" x:Name="myImage2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill">
+                                    </Image>
+                                    <TextBlock TextWrapping="Wrap" x:Name="ErrorText" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Visibility="Collapsed" Text="The specified folder does not exist" FontSize="20" />
+                                </Canvas>
+                            </ScrollViewer>
                         </Border>
                         <DockPanel Grid.Row="1">
                             <Grid HorizontalAlignment="Center">
@@ -91,7 +93,7 @@
                             </Grid>
                         </DockPanel>
                         <Border Grid.Row="2" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
-                            <Frame Margin="2" Source="CommandWindow.xaml" />
+                            <TextBlock Name="txt_block_commands" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                         </Border>
                     </Grid>
                 </DockPanel>
