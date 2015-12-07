@@ -46,7 +46,7 @@
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                <Canvas Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                <Canvas Name="canvas1" Height="{Binding RelativeSource={RelativeSource FindAncestor, 
                                                    AncestorType=ScrollViewer, 
                                                    AncestorLevel=1},
                                                     Path=ActualWidth}" 

@@ -43,7 +43,6 @@ namespace DSAnimator9000
             IntervalTimer = 2;
             strImagePath = Directory.GetCurrentDirectory() + "\\Output\\png\\";
             ImageControls = new[] { myImage, myImage2 };
-            
             LoadImageFolder(strImagePath);
 
             timerImageChange = new DispatcherTimer();
@@ -53,8 +52,8 @@ namespace DSAnimator9000
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            PlaySlideShow();
-            timerImageChange.IsEnabled = true;
+            //PlaySlideShow();
+            //timerImageChange.IsEnabled = true;
         }
 
         private void Menu_New_Click(object sender, RoutedEventArgs e)
@@ -87,6 +86,8 @@ namespace DSAnimator9000
 
         private void Menu_Animate_Click(object sender, RoutedEventArgs e)
         {
+            Images.Clear();
+            
             //Save text to a file and pass that file to the next block of code that start the poor_man_lexer
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = @"c:\temp\";
@@ -119,16 +120,16 @@ namespace DSAnimator9000
             string[] txt_commands = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             //TODO: Clean up the strings in the txt_commands array, remove the ending string
             //TODO: next we need to populate the txt_block_commands with the entry corresponing to the currently displayed image
-            
-            
+
+
             // load new pngs
-            //Initialize Image control, Image directory path and Image timer.
-            IntervalTimer = 2;
-            strImagePath = Directory.GetCurrentDirectory() + "\\Output\\png\\";
-            ImageControls = new[] { myImage, myImage2 };
             timerImageChange.IsEnabled = false;
-            PlaySlideShow();
+            CurrentSourceIndex = 0;
+            CurrentCtrlIndex = 0;
+            LoadImageFolder("DOESNTMATTER");
             timerImageChange.IsEnabled = true;
+            PlaySlideShow();
+
         }
 
         private void btn_back_Click(object sender, RoutedEventArgs e)
@@ -216,6 +217,7 @@ namespace DSAnimator9000
                           where ValidImageExtensions.Contains(file.Extension, StringComparer.InvariantCultureIgnoreCase)
                           //orderby r.Next()
                           select CreateImageSource(file.FullName, true);
+     
             Images.Clear();
             Images.AddRange(sources);
             sw.Stop();
@@ -228,11 +230,16 @@ namespace DSAnimator9000
             {
                 var src = new BitmapImage();
                 src.BeginInit();
+                // pesky little caching bug fixed by the next line. Tells it to ignore whats cached and RECACHE!
+                src.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 src.UriSource = new Uri(file, UriKind.Absolute);
                 src.CacheOption = BitmapCacheOption.OnLoad;
                 src.EndInit();
-                src.Freeze();
-                return src;
+                //             src.Freeze();
+                var img = new BitmapImage();
+               // img.BeginInit();
+                img = src;
+                return img;
             }
             else
             {
@@ -261,9 +268,8 @@ namespace DSAnimator9000
 
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
-
-                imgFadeIn.Source = newSource;
                 TransitionType = TransitionEffects[EffectIndex].ToString();
+                imgFadeIn.Source = newSource;
 
                 Storyboard StboardFadeOut = (Resources[string.Format("{0}Out", TransitionType.ToString())] as Storyboard).Clone();
                 StboardFadeOut.Begin(imgFadeOut);
