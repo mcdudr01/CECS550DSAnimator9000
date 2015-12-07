@@ -33,7 +33,9 @@ namespace DSAnimator9000
         private static string[] TransitionEffects = new[] { "Fade" };
         private string TransitionType, strImagePath = "";
         private int CurrentSourceIndex, CurrentCtrlIndex, EffectIndex = 0, IntervalTimer = 2;
-        
+        private string[] delimiters = { ";", "{", "}", "\r\n" };
+        private string[] txt_commands;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -58,11 +60,13 @@ namespace DSAnimator9000
 
         private void Menu_New_Click(object sender, RoutedEventArgs e)
         {
+            timerImageChange.IsEnabled = false;
             txt_code.Text = "";
         }
 
         private void Menu_Open_Click(object sender, RoutedEventArgs e)
         {
+            timerImageChange.IsEnabled = false;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = @"c:\temp\";
             openFileDialog.Filter = "CSharp files (*.cs)|*.cs|Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -78,11 +82,6 @@ namespace DSAnimator9000
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, txt_code.Text);
         }
-
-        //private void Menu_Exit_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
 
         private void Menu_Animate_Click(object sender, RoutedEventArgs e)
         {
@@ -100,7 +99,7 @@ namespace DSAnimator9000
             //Logic to run poor_man_lexer and pass code present in the txt_code textbox
             //string path = "C:\\Users\\Dooder\\Documents\\GitHub\\DSAnimator9000\\lexer\\poor_man_lexer\\bin\\Debug\\";
             string path = Directory.GetCurrentDirectory() + "\\..\\..\\lexer\\poor_man_lexer\\bin\\Debug\\";
-
+            
             Process p = new Process();
             p.StartInfo.FileName = path + "poor_man_lexer.exe";
             //p.StartInfo.Arguments = path + "Input\\List.cs";
@@ -115,12 +114,16 @@ namespace DSAnimator9000
             p.WaitForExit();
 
             // load commands to command display window under the animation window
-            string[] delimiters = { ";" };
             string value = txt_code.Text;
-            string[] txt_commands = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //TODO: Clean up the strings in the txt_commands array, remove the ending string
-            //TODO: next we need to populate the txt_block_commands with the entry corresponing to the currently displayed image
-
+            txt_commands = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < txt_commands.Count() - 1; i++)
+            {
+                txt_commands[i] += ";";
+            }
+            //Small hack to clean the array of commands. Remove the first two lines, class and main.
+            txt_commands = txt_commands.Where(x => x != txt_commands[0]).ToArray();
+            txt_commands = txt_commands.Where(x => x != txt_commands[0]).ToArray();
+            txt_commands = txt_commands.Where(x => x != txt_commands[0]).ToArray();
 
             // load new pngs
             timerImageChange.IsEnabled = false;
@@ -128,6 +131,7 @@ namespace DSAnimator9000
             CurrentCtrlIndex = 0;
             LoadImageFolder("DOESNTMATTER");
             timerImageChange.IsEnabled = true;
+            txt_block_commands.Text = txt_commands[0];
             PlaySlideShow();
 
         }
@@ -146,6 +150,7 @@ namespace DSAnimator9000
                 else
                     CurrentSourceIndex = (CurrentSourceIndex - 1) % Images.Count;
 
+                txt_block_commands.Text = txt_commands[CurrentSourceIndex];
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
                 ImageSource newSource = Images[CurrentSourceIndex];
@@ -184,6 +189,7 @@ namespace DSAnimator9000
                 CurrentCtrlIndex = (CurrentCtrlIndex + 1) % 2;
                 CurrentSourceIndex = (CurrentSourceIndex + 1) % Images.Count;
 
+                txt_block_commands.Text = txt_commands[CurrentSourceIndex];
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
                 ImageSource newSource = Images[CurrentSourceIndex];
@@ -266,6 +272,7 @@ namespace DSAnimator9000
                 ImageSource newSource = Images[CurrentSourceIndex];
                 CurrentSourceIndex = (CurrentSourceIndex + 1) % Images.Count;
 
+                txt_block_commands.Text = txt_commands[CurrentSourceIndex - 1];
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
                 TransitionType = TransitionEffects[EffectIndex].ToString();

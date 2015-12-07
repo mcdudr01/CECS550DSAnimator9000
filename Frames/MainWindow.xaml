@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DSAnimator9000"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="800">
+        Title="DSAnimator9001!" Height="800" Width="800">
     <!--<Window.Background>
         <ImageBrush ImageSource="Icons/arrow.png" />
     </Window.Background>-->
@@ -93,7 +93,7 @@
                             </Grid>
                         </DockPanel>
                         <Border Grid.Row="2" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
-                            <TextBlock Name="txt_block_commands" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            <TextBlock Name="txt_block_commands" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                         </Border>
                     </Grid>
                 </DockPanel>
