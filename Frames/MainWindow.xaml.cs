@@ -256,8 +256,10 @@ namespace DSAnimator9000
         }
 
         private void timerImageChange_Tick(object sender, EventArgs e)
-        {
+        {   
             PlaySlideShow();
+            //if (CurrentSourceIndex == 0) { txt_block_commands.Text = txt_commands[CurrentSourceIndex]; }
+            //else { txt_block_commands.Text = txt_commands[CurrentSourceIndex - 1]; }
         }
 
         private void PlaySlideShow()
@@ -270,9 +272,13 @@ namespace DSAnimator9000
                 CurrentCtrlIndex = (CurrentCtrlIndex + 1) % 2;
 
                 ImageSource newSource = Images[CurrentSourceIndex];
+                //if (CurrentSourceIndex == 0) { txt_block_commands.Text = txt_commands[CurrentSourceIndex]; }
+                //else { txt_block_commands.Text = txt_commands[CurrentSourceIndex - 1]; }
+                txt_block_commands.Text = txt_commands[CurrentSourceIndex];
                 CurrentSourceIndex = (CurrentSourceIndex + 1) % Images.Count;
 
-                txt_block_commands.Text = txt_commands[CurrentSourceIndex - 1];
+                
+                
                 Image imgFadeOut = ImageControls[oldCtrlIndex];
                 Image imgFadeIn = ImageControls[CurrentCtrlIndex];
                 TransitionType = TransitionEffects[EffectIndex].ToString();
